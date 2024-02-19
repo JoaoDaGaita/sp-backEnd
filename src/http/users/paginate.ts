@@ -14,14 +14,13 @@ export async function paginate(request: FastifyRequest, reply: FastifyReply) {
 
     const { since } = paginateQuery.parse(request.query)
 
-    const iterator = octokit.request("https://api.github.com/users", {
+    const { data } = await octokit.request("https://api.github.com/users", {
       owner: "octocat",
       repo: "hello-world",
       per_page,
       since: since
     });
 
-    const { data } = await iterator
     page = per_page + since
     const nextUrl = `https://api.github.com/users?since=${page}`
 
