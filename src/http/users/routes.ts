@@ -6,5 +6,5 @@ import { repos } from "./repos"
 export async function userRoutes(app: FastifyInstance) {
   app.get('/api/users/:username/details', details)
   app.get('/api/users/:username/repos', repos)
-  app.get('/api/users', paginate)
+  app.get('/api/users/:since?', paginate)
 }

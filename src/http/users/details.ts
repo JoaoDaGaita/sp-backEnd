@@ -1,4 +1,3 @@
-
 import { octokit } from "@/app";
 import { FastifyReply, FastifyRequest } from "fastify";
 
@@ -12,6 +11,7 @@ export async function details(request: FastifyRequest, reply: FastifyReply) {
     })
 
     const { username } = getUserParams.parse(request.params)
+
     const response = await octokit.request('GET /users/{username}', {
       username: username
     })

@@ -18,8 +18,6 @@ describe('User Repos', () => {
       .get(`/api/users/${username}/repos`)
       .send()
 
-    console.log(userResponse.body[0].id)
-
     expect(userResponse.statusCode).toEqual(200)
     expect(userResponse.body[0].id).toEqual(5282)
   })

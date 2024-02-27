@@ -2,29 +2,41 @@ import { octokit } from "@/app";
 import { FastifyReply, FastifyRequest } from "fastify";
 import { z } from "zod";
 
-let page = 1
-let per_page = 10
+
+interface User {
+  login: string
+  id: number
+  node_id: string
+  avatar_url: string
+  gravatar_id: string
+  url: string
+  html_url: string
+  followers_url: string
+  following_url: string
+  gists_url: string
+  starred_url: string
+  subscriptions_url: string
+  organizations_url: string
+  repos_url: string
+  events_url: string
+  received_events_url: string
+  type: string
+  site_admin: boolean
+}
 
 export async function paginate(request: FastifyRequest, reply: FastifyReply) {
-  //const skip = (since - 1) * per_page
   try {
     const paginateQuery = z.object({
-      since: z.coerce.number()
+      since: z.coerce.number(),
+      per_page: z.coerce.number().default(0)
     })
 
-    const { since } = paginateQuery.parse(request.query)
+    const { since, per_page } = paginateQuery.parse(request.query)
 
-    const { data } = await octokit.request("https://api.github.com/users", {
-      owner: "octocat",
-      repo: "hello-world",
-      per_page,
-      since: since
-    });
+    const { data } =
+      await octokit.request<User[], any>(`https://api.github.com/users?since=${since}&per_page=${per_page}`)
 
-    page = per_page + since
-    const nextUrl = `https://api.github.com/users?since=${page}`
-
-    return reply.send({ data, nextUrl }).status(200)
+    return reply.send(data).status(200)
 
   } catch (error) {
     return error
