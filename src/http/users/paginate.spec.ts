@@ -22,10 +22,7 @@ describe('User Paginate', () => {
       .send()
 
     expect(usersPaginateResponse.statusCode).toEqual(200)
-    console.log(usersPaginateResponse.body);
-
     expect(usersPaginateResponse.body).toHaveLength(30)
-
     expect(usersPaginateResponse.body[0]).toEqual(
       expect.objectContaining({ login: 'vanpelt' })
     )
