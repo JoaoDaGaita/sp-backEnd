@@ -2,10 +2,11 @@ import { Octokit } from "octokit";
 import fastify from "fastify";
 import { userRoutes } from "./http/users/routes";
 import cors from "@fastify/cors";
+import { env } from "./env/index"
 
 export const octokit = new Octokit({
-  auth: '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'
-});
+  auth: env.GITHUB_TOKEN
+})
 
 export const app = fastify()
 

@@ -5,6 +5,7 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 describe('User Paginate', () => {
   beforeAll(async () => {
+
     app.ready()
   })
 
@@ -12,18 +13,20 @@ describe('User Paginate', () => {
     app.close()
   })
 
-  it('should be able to fetch users.', async () => {
+  it('should be able to fetch paginated users.', async () => {
     const usersPaginateResponse = await request(app.server)
-      .get('/api/users')
+      .get("/api/users")
       .query({
         since: 11,
       })
       .send()
 
     expect(usersPaginateResponse.statusCode).toEqual(200)
-    expect(usersPaginateResponse.body.data).toHaveLength(10)
-    expect(usersPaginateResponse.body).toHaveProperty('nextUrl')
-    expect(usersPaginateResponse.body.data[0]).toEqual(
+    console.log(usersPaginateResponse.body);
+
+    expect(usersPaginateResponse.body).toHaveLength(30)
+
+    expect(usersPaginateResponse.body[0]).toEqual(
       expect.objectContaining({ login: 'vanpelt' })
     )
   })

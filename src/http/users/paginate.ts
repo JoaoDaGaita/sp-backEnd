@@ -2,7 +2,6 @@ import { octokit } from "@/app";
 import { FastifyReply, FastifyRequest } from "fastify";
 import { z } from "zod";
 
-
 interface User {
   login: string
   id: number
@@ -28,7 +27,7 @@ export async function paginate(request: FastifyRequest, reply: FastifyReply) {
   try {
     const paginateQuery = z.object({
       since: z.coerce.number(),
-      per_page: z.coerce.number().default(0)
+      per_page: z.coerce.number().default(30)
     })
 
     const { since, per_page } = paginateQuery.parse(request.query)
@@ -38,7 +37,7 @@ export async function paginate(request: FastifyRequest, reply: FastifyReply) {
 
     return reply.send(data).status(200)
 
-  } catch (error) {
+  } catch (error: unknown) {
     return error
   }
 }
